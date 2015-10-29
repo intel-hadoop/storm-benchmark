@@ -64,8 +64,6 @@ public class DRPC extends StormBenchmark {
   public static final String FUNCTION = "reach";
   public static final List<String> ARGS =
           Arrays.asList("foo.com", "foo.news.com", "foo.contact.com");
-  public static final String SERVER = "drpc.server";
-  public static final String PORT = "drpc.port";
   public static final String SPOUT_ID = "spout";
   public static final String SPOUT_NUM = "component.spout_num";
   public static final String PAGE_ID = "page";
@@ -83,27 +81,8 @@ public class DRPC extends StormBenchmark {
 
   private IPartitionedTridentSpout spout;
 
-  private String server;
-  private int port;
-
   @Override
   public StormTopology getTopology(Config config) {
-
-    Object sObj = config.get(SERVER);
-    if (null == sObj) {
-      throw new IllegalArgumentException("must set a drpc server");
-    }
-    server = (String) sObj;
-    config.put(Config.DRPC_SERVERS, Lists.newArrayList(server));
-
-    Object pObj = config.get(PORT);
-    if (null == pObj) {
-      throw new IllegalArgumentException("must set a drpc port");
-    }
-    port = Utils.getInt(pObj);
-    config.put(Config.DRPC_PORT, port);
-
-    LOG.info("drpc server: " + server + "; drpc port: " + port);
 
     final int spoutNum = BenchmarkUtils.getInt(config, SPOUT_NUM, DEFAULT_SPOUT_NUM);
     final int pageNum = BenchmarkUtils.getInt(config, PAGE_NUM, DEFAULT_PAGE_BOLT_NUM);
@@ -162,7 +141,7 @@ public class DRPC extends StormBenchmark {
 
   @Override
   public IMetricsCollector getMetricsCollector(Config config, StormTopology topology) {
-    return new DRPCMetricsCollector(config, FUNCTION, ARGS, server, port);
+    return new DRPCMetricsCollector(config, FUNCTION, ARGS);
   }
 
   public static class StaticSingleKeyMapState extends ReadOnlyState implements ReadOnlyMapState<Object> {

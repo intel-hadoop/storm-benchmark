@@ -43,17 +43,15 @@ public class DRPCMetricsCollector implements IMetricsCollector {
   final MetricsCollectorConfig config;
   final String function;
   final List<String> args;
-  final String server;
   final int port;
   int index = 0;
 
   public DRPCMetricsCollector(Config stormConfig,
-                              String function, List<String> args, String server, int port) {
+                              String function, List<String> args) {
     this.config = new MetricsCollectorConfig(stormConfig);
     this.function = function;
     this.args = args;
-    this.server = server;
-    this.port = port;
+    this.port = (Integer) stormConfig.get(Config.DRPC_PORT);
   }
 
   @Override
@@ -103,7 +101,7 @@ public class DRPCMetricsCollector implements IMetricsCollector {
 
   private long execute(String arg, PrintWriter writer) throws TException, DRPCExecutionException {
     LOG.debug(String.format("executing %s('%s')", function, arg));
-    DRPCClient client = new DRPCClient(server, port);
+    DRPCClient client = new DRPCClient("127.0.0.1", port);
     long start = System.currentTimeMillis();
     String result = client.execute(function, arg);
     long end = System.currentTimeMillis();

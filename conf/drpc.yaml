@@ -23,7 +23,7 @@ metrics.path: "reports"
 # kafka configurations
 broker.list: "127.0.0.1:9092"
 zookeeper.servers: "127.0.0.1:2181"
-kafka.root.path: "/kafka"
+kafka.root.path: ""
 topic: "pageview"
 client_id: "drpc"
 
@@ -37,9 +37,5 @@ component.page_bolt_num: 6
 component.view_bolt_num: 9
 component.user_bolt_num: 4
 component.follower_bolt_num: 8
-
-# drpc configurations
-drpc.server: "127.0.0.1"
-drpc.server: "3772"
 
 
